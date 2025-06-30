@@ -1,19 +1,65 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <form action="./#" method="get">
-        <p>
-            <label for="name">Enter Name</label>
-            <input type="text" name="Name" id="name" required value="Bob">
-        </p>
-        <p>
-            <input type="submit">
-        </p>
+  <head>
+    <meta charset="utf-8" />
+    <title>Second form</title>
+  </head>
+  <body>
+    <form action="./payment_page" method="get">
+      <h2>Register for the meetup</h2>
+      <fieldset disabled>
+        <legend>Choose hotel room type:</legend>
+        <div>
+          <input type="radio" id="hotel1" name="Hotel1" value="Hotel 1">
+          <label for="hotel1">Hotel 1</label>
+          <input type="radio" name="Hotel1" id="hotel2" value="Hotel 2">
+          <label for="hotel2">Hotel 2</label>
+          <input type="radio" name="Hotel1" value="Hotel 3" id="Hotel3" disabled>
+          <label for="Hotel3">Hotel 3</label>
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>Choose classes to attend:</legend>
+        <div>
+          <input type="checkbox" id="yoga" name="yoga" />
+          <label for="yoga">Yoga (+$10)</label>
+
+          <input type="checkbox" id="coffee" name="coffee" />
+          <label for="coffee">Coffee roasting (+$20)</label>
+
+          <input type="checkbox" id="balloon" name="balloon" />
+          <label for="balloon">Balloon animal art (+$5)</label>
+        </div>
+      </fieldset>
+      <p>
+        <label for="transport">How are you getting here:</label>
+        <select name="transport" id="transport">
+          <option value="" selected>--Please choose an option--</option>
+          <option value="plane">Plane</option>
+          <option value="bike">Bike</option>
+          <option value="walk">Walk</option>
+          <option value="bus">Bus</option>
+          <option value="train">Train</option>
+          <option value="jetPack">Jet pack</option>
+        </select>
+      </p>
+      <p>
+        <label for="comments">Any other comments:</label>
+        <textarea id="comments" name="comments" rows="2" cols="333"></textarea>
+      </p>
+      <p>
+        <button>Continue to payment</button>
+      </p>
     </form>
-</body>
+    <svg
+  version="1.1"
+  baseProfile="full"
+  width="300"
+  height="200"
+  xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="100%" fill="black" />
+  <circle cx="150" cy="100" r="90" fill="blue" />
+</svg>
+
+  </body>
 </html>
