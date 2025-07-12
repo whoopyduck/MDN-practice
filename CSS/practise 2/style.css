@@ -16,10 +16,19 @@
 {
     width: 100px;
     height: 100px;
-    margin-top: auto;
-    margin-left: auto;
-    margin-right: auto;
-    margin-bottom: auto;
+    margin-top: 20px;
+    margin-left: 20px;
+    border-top-style: dotted;
+    border-right-style: dashed;
+    border-bottom-style:dotted;
+    border-left-style:dashed;
+    /* margin-right: auto;
+    margin-bottom: auto; */
     background-color: red;
     /* transform:rotate(0.8turn); */
+    transform:rotate(0deg)
+}
+body{
+    background-image: url(./7e134904-41ad-467e-b671-62022d75b5cf-p.jpeg);
+    background-size: cover;
 }
