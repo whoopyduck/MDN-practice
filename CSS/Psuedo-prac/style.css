@@ -29,3 +29,26 @@ p::first-letter{
     border: 1px solid black;
     font-size:2em;
 }
+/* Generating Content before a link via attribute selector */
+a[target="_blank"]::before{
+    content:"Caution External Link ";
+    background-color: yellow;
+    color: red;
+    text-decoration: none;
+}
+/* Generating Content after a link via a attribute selector */
+a[href="#useless"]::after{
+    content: " Do not worry its useless so poke it";
+    text-decoration: none;
+    color: violet;
+    background-color: white;
+    display:inline-block;
+}
+.box::before{
+    content: "";
+    display: block;
+    width: 100px;
+    height: 100px;
+    background-color: purple;
+    border: 4px solid black;
+}
