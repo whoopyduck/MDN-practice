@@ -1,0 +1,31 @@
+a[href="#"]{
+    background-color: green;
+    color: black;
+}
+a[target="_blank"]{
+    background-color: red;
+}
+
+body p:first-child{
+    color: hotpink;
+    letter-spacing: 1px;
+    line-height: 2;
+}
+a[href="#"]:hover{
+    background-color: red;
+    color: hotpink;
+}
+a[target="_blank"]:visited{
+    color: yellow;
+}
+a[href="#useless"]:link{     /* Psuedo Class that changes whole object */
+    color: blue;
+}
+p::selection{
+    background-color: red;
+}
+p::first-letter{
+    background-color: yellow;
+    border: 1px solid black;
+    font-size:2em;
+}
