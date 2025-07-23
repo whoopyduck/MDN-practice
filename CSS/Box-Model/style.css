@@ -1,0 +1,11 @@
+p{
+    border:3px dashed hotpink;
+}
+ul{
+    display: flex;
+    list-style: none;
+    
+}
+ul > li {
+    border: 2px solid red;
+}
