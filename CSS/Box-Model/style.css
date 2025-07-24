@@ -1,11 +1,37 @@
-p{
-    border:3px dashed hotpink;
+p {
+    border: 3px dashed hotpink;
 }
-ul{
+
+ul {
     display: flex;
     list-style: none;
-    
+    padding-left: 0;
+
 }
-ul > li {
+
+ul>li {
     border: 2px solid red;
+}
+
+/* alternataive styling or Box model where all of the content among with padding margin gets sets up with one single value */
+
+/* *{
+    box-sizing: border-box;
+    width: 200px;
+} */
+
+.box {
+    border: 5px solid rebeccapurple;
+    background-color: lightgray;
+    padding: 40px;
+    margin: 40px;
+    width: 300px;
+    height: 150px;
+}
+
+.alternate {
+    box-sizing: border-box;
+    width: 389.6px;
+    height: 239.6px;
+    /* margin:auto; */
 }
