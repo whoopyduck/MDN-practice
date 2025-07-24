@@ -21,7 +21,7 @@ a[target="_blank"]:visited{
 a[href="#useless"]:link{     /* Psuedo Class that changes whole object */
     color: blue;
 }
-p::selection{
+*::selection{
     background-color: red;
 }
 p::first-letter{
