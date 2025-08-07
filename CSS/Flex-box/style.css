@@ -1,0 +1,24 @@
+header{
+    background-color: purple;
+    color: white;
+    /* padding: 10px; */
+    /* margin: 10px 10px; */
+    margin: 0;
+    text-align: center;
+    line-height: 100px;
+}
+body{
+    margin: 0;
+}
+article{
+    background-color: aqua;
+    padding: 10px;
+    margin: 10px;
+
+}
+section{
+    display: flex;
+    flex-direction: row;
+    flex-wrap:wrap;
+    /* justify-content: center; */
+}
