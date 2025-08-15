@@ -1,0 +1,24 @@
+body {
+  font-family: sans-serif;
+  width: 90%;
+  max-width: 960px;
+  margin: 10px auto;
+}
+div {
+  height: 100px;
+  border: 1px solid black;
+}
+button {
+  font-size: 18px;
+  line-height: 1.5;
+  width: 15%;
+}
+/* Add your flexbox CSS below here */
+div{
+    display: flex;
+    align-items: center;
+    justify-content:space-around;
+}
+/* button:nth-of-type(1){
+    align-self: flex-start;
+} */
