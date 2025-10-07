@@ -39,22 +39,32 @@ function returnRandomStoryString() {
   return storyText;
 }
 
-console.log(returnRandomStoryString());
+// console.log(returnRandomStoryString());
 // 4. EVENT LISTENER AND PARTIAL GENERATE FUNCTION DEFINITION
 
 generateBtn.addEventListener("click", generateStory);
 
 function generateStory() {
+  let newStory = returnRandomStoryString();
   if (customName.value !== "") {
     const name = customName.value;
+    // let storyText = returnRandomStoryString();
+    // console.log(storyText);
+    newStory = newStory.replaceAll("Bob" , name);
+    console.log(newStory);
   }
 
   if (document.getElementById("uk").checked) {
-    const weight = Math.round(300);
-    const temperature = Math.round(94);
+    const weight = Math.round(300 % 14) + " Stones";
+    const temperature = Math.round((94 - 32) * 5/9) + " Celsius";
+    newStory = newStory.replaceAll("300 pounds",weight);
+    newStory = newStory.replaceAll("94 Fahrenheit" , temperature);
+    console.log(weight)
   }
-
+  
   // TODO: replace "" with the correct expression
-  story.textContent = "";
+  story.textContent = newStory;
   story.style.visibility = "visible";
 }
+
+console.log(returnRandomStoryString());
