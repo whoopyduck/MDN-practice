@@ -54,7 +54,9 @@ let randomNumber = Math.floor(Math.random() * 100) + 1;
         guessCount = 1;
         const resetParas = document.querySelectorAll('.resultParas p');
         for (const resetPara of resetParas) {
-          resetPara.textContent = '';
+          console.log(resetPara.textContent);
+          // console.log(resetParas.textContent);
+          // resetPara.textContent = '';
         }
 
         resetButton.parentNode.removeChild(resetButton);
