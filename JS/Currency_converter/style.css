@@ -1,0 +1,17 @@
+/* h2{
+    text-align: center;
+}  */
+  
+div{
+    text-align: center;
+}
+#output{
+   /* margin-left: 1%; */
+   width: 15%;
+}
+select{
+    width: 13%;
+}
+#numfield{
+     width: 13%;
+}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./style.css">
+    <title>Currency Converter</title>
+    <script src="./script.js" defer></script>
+</head>
+<body>
+    <div>
+        <p>
+            <h2>Currency Converter </h2>
+            <!-- <p id="text">Type in a Number</p> -->
+            <label for="numfield">Enter a number</label>
+            <input type="number" id="numfield" value="1">
+        </p>
+        <p>
+            <label for="items">Select Currency</label>
+            <select id="items" name="Currency"> 
+                <option value="usd">USD</option>
+                <option value="eur">EUR</option>
+                <option value="cad" >CAD</option>
+                <option value="jpy">JPY</option>
+            </select>
+        </p>
+        <p class="op">
+            <button id="btn1">Click me</button>
+            <input type="textbox" name="op" id="output">
+        </p>
+    </div>
+</body>
+</html>
