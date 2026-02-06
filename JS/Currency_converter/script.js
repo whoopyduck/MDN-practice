@@ -4,15 +4,28 @@ const select = document.body.querySelector("select");
 const test = document.body.querySelector(".op");
 const button1 = document.body.querySelector("#btn1");
 // inputField.setAttribute("value" , 1)
+let arrayone = inputField.value.split(" ");
 
 console.log(typeof inputField.value)
 console.log(typeof inputField.valueAsNumber)
 console.log(select.value)
-// test.innerText = "Sup";
 
+let num = Number(arrayone[0]);
+inputField.value = `${num} ${select.value.toUpperCase()}`;
+// test.innerText = "Sup";
+ 
+console.log(arrayone);
+// console.log(num)
+
+select.addEventListener("change" , () => {
+    inputField.value = `${num} ${select.value.toUpperCase()}`;
+});
 
 button1.addEventListener("click" , () => {
-    let x = inputField.valueAsNumber;
+    arrayone = inputField.value.split(" ");
+    num = Number(arrayone[0]);
+    console.log(arrayone[0])
+    let x = num;
     output.value = `INR ${currencies[select.value].convert(x)}`;
 });
 const currencies = { 
@@ -46,4 +59,4 @@ const currencies = {
                 }
         }
 }
-output.value  = `INR ${currencies[select.value].convert(inputField.value)}`;
+output.value  = `INR ${currencies[select.value].convert(num)}`;
