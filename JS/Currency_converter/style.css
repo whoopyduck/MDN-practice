@@ -1,17 +1,44 @@
-/* h2{
-    text-align: center;
-}  */
-  
-div{
-    text-align: center;
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #f4f4f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
 }
-#output{
-   /* margin-left: 1%; */
-   width: 15%;
+
+.container {
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    width: 350px;
 }
-select{
-    width: 13%;
+
+input, select, button {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    box-sizing: border-box; /* Prevents elements from bursting out of the container */
 }
-#numfield{
-     width: 13%;
+
+button {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+button:active {
+    transform: scale(0.96); /* Makes the button "squish" when you click it */
+}
+#reset{
+    background-color: red;
 }
