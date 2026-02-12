@@ -1,0 +1,16 @@
+#Play{
+    display: flex;
+
+}
+.Container{
+    display: flex;
+    justify-content: space-evenly;
+}
+.buttons{
+    padding: 20px;
+    border-radius: 20px;
+    margin-top: 50vh;
+    font-family: 'Times New Roman', Times, serif;
+    font-style: bold;
+    font-size: medium;
+}

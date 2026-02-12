@@ -1,0 +1,26 @@
+const btn = document.querySelector("#Play");
+const btn2 = document.querySelector("#Stop");
+
+function random(number) {
+  return Math.floor(Math.random() * (number + 1));
+}
+function run(){
+   const rndCol = `rgb(${random(255)} ${random(255)} ${random(255)})`;
+  document.body.style.backgroundColor = rndCol;
+}
+
+function scream(){
+    console.log("GOYYY")
+}
+let clear1 , clear2 ;
+
+btn.addEventListener("mouseover", () => {
+ clear1 = setInterval(run, 100)
+ clear2 = setInterval(scream , 1000)
+});
+btn2.addEventListener("mouseover", () => {
+    clearInterval(clear1);
+    clearInterval(clear2);
+    document.body.style.backgroundColor = "white";
+})
+
