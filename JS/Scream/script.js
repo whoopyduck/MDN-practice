@@ -1,33 +1,39 @@
 const btn = document.querySelector("#Play");
 const btn2 = document.querySelector("#Stop");
 
+let bgInterval = null;
+
+const audio1 = new Audio('./Src/Video Project.mp3');
+const audio2 = new Audio('./Src/Video Project 2.m4a');
+
+audio1.loop = true;
+
 function random(number) {
   return Math.floor(Math.random() * (number + 1));
 }
-function run(){
-   const rndCol = `rgb(${random(255)} ${random(255)} ${random(255)})`;
+
+function flashBackground() {
+  const rndCol = `rgb(${random(255)} ${random(255)} ${random(255)})`;
   document.body.style.backgroundColor = rndCol;
 }
 
-function scream(){
-    console.log("GOYYY")
-}
-let clear1 , clear2 ;
+btn.addEventListener("click", () => {
+  if (bgInterval) return; // prevent stacking
 
-btn.addEventListener("mouseover", () => { //Will run two functions with one second and 1 milisecond gap -> setInterval
- clear1 = setInterval(run, 100)   //Storing seInterval object in a var 
- clear2 = setInterval(scream , 1000)
+  audio1.currentTime = 0;
+  audio1.play().catch(err => console.log(err));
+
+  bgInterval = setInterval(flashBackground, 100);
 });
 
-btn2.addEventListener("mouseover", () => {
-    clearInterval(clear1);  //using that var to clear out setInterval
-    clearInterval(clear2);  //by using global function
-    document.body.style.backgroundColor = "white";
-})
+btn2.addEventListener("click", () => {
+  clearInterval(bgInterval);
+  bgInterval = null;
 
-//Experimental Feature
-/*btn.addEventListener("mouseout", () => {
-    clearInterval(clear1);                    
-    clearInterval(clear2);  
-    document.body.style.backgroundColor = "white";
-}) */
+  document.body.style.backgroundColor = "white";
+
+  audio1.pause();
+  audio1.currentTime = 0;
+
+  audio2.play().catch(err => console.log(err));
+});
