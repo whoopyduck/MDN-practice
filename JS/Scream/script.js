@@ -3,8 +3,8 @@ const btn2 = document.querySelector("#Stop");
 
 let bgInterval = null;
 
-const audio1 = new Audio('./Src/Video Project.mp3');
-const audio2 = new Audio('./Src/Video Project 2.m4a');
+const audio1 = new Audio('./Video Project.mp3');
+const audio2 = new Audio('./Video Project 2.m4a');
 
 audio1.loop = true;
 
