@@ -1,0 +1,24 @@
+#daddy{
+    margin-top: 50%;
+    margin-left: 35%;
+    background-color: red;
+    width: 450px;
+    height: 75%;
+    text-align: center;
+}
+
+#son{
+    display:inline-block;
+    height:250px;
+    width:45%;
+    margin: 20% 20%;
+    border: 1px solid black;
+    background-color: green;
+    padding: 30px;
+}
+
+button{
+    margin-top: 50%;
+    width: 90px;
+    height: 60px;
+}

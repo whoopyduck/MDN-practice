@@ -1,0 +1,14 @@
+#container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: 100px;
+}
+#stop{
+  display: block;
+  margin: 0 auto; /* only good for a single element */ 
+  width: 100px;
+  height: 50px;
+  border-radius: 10px;
+  text-decoration: solid;
+  font-size: large;
+}

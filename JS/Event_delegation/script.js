@@ -1,0 +1,32 @@
+function random(number) {
+  return Math.floor(Math.random() * number);
+}
+
+function bgChange(e) {
+  const rndCol = `rgb(${random(255)} ${random(255)} ${random(255)})`;
+  e.target.style.backgroundColor = rndCol;
+  // return rndCol;
+}
+
+const container = document.querySelector("#container");
+const stwap = document.querySelector("#stop");
+const box = document.getElementsByClassName('tile');
+console.log(box.length);
+let id = [];
+let x ;
+container.addEventListener("click", (e) => {
+    // let a = bgChange(e);
+    
+     id.push(setInterval(() =>{ //pushing up interval id's 
+      bgChange(e);
+    } ,10)
+  );
+  console.log(id)
+});
+
+stwap.addEventListener("click" , () => {
+  console.log(id);
+  for(i = 0 ; i < id.length ; i++){
+    clearInterval(id[i]);
+  }
+})
