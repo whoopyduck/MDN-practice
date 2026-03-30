@@ -11,9 +11,10 @@ function bgChange(e) {
 const container = document.querySelector("#container");
 const stwap = document.querySelector("#stop");
 const box = document.getElementsByClassName('tile');
+const reset = document.querySelector("#reset");
 console.log(box.length);
 let id = [];
-let x ;
+
 container.addEventListener("click", (e) => {
     // let a = bgChange(e);
     
@@ -28,5 +29,16 @@ stwap.addEventListener("click" , () => {
   console.log(id);
   for(i = 0 ; i < id.length ; i++){
     clearInterval(id[i]); //clearing up id's by refrenencing up position in arrays 
+    id[i] = null; //explicitly nullifying every elements reference in the array
   }
+  // id = null
 })
+
+reset.addEventListener("click" , () => {
+    console.log(box[1].style)
+    console.log(box)
+    for(i = 0 ; i < box.length ; i++){
+      box[i].style.backgroundColor = "white";
+    }
+    // box[1].style.backgroundColor = "white";
+});
