@@ -17,9 +17,9 @@ let x ;
 container.addEventListener("click", (e) => {
     // let a = bgChange(e);
     
-     id.push(setInterval(() =>{ //pushing up interval id's 
+     id.push(setInterval(() =>{ //pushing up interval id's to store id 
       bgChange(e);
-    } ,10)
+    } ,100)
   );
   console.log(id)
 });
@@ -27,6 +27,6 @@ container.addEventListener("click", (e) => {
 stwap.addEventListener("click" , () => {
   console.log(id);
   for(i = 0 ; i < id.length ; i++){
-    clearInterval(id[i]);
+    clearInterval(id[i]); //clearing up id's by refrenencing up position in arrays 
   }
 })
