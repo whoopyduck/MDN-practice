@@ -10,6 +10,7 @@ if(input.value == false) { //Checking for blank inputs
 else{
     //Creating li and appending them
     let inputval = input.value;
+    input.value = "";
     let li = document.createElement("li");
     // li.textContent = inputval;
     let span = document.createElement("span");
@@ -19,8 +20,9 @@ else{
     li.appendChild(span);
     li.appendChild(button_del);
     button_del.addEventListener("click" , (e) =>{
-        console.log(e.target)
+        li.remove();
     })
+
     ul.appendChild(li);
 }
 }
