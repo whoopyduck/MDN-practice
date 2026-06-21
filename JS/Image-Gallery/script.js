@@ -44,17 +44,17 @@ function updateDisplayedImage(e){
 }
 
 btn.addEventListener("click" , (e) => {
-    if(btn.getAttribute("class" , "dark") === "dark"){
+    if(btn.getAttribute("class") === "dark"){
         btn.textContent = "Lighten";
+        console.log(btn.getAttribute("class"))
         overlay.style.backgroundColor = "rgb(0 0 0 / 0.5)";
         // btn.removeAttribute("class","dark");
-        btn.classList.toggle("dark");
         // btn.classList.remove("dark");
     }
     else{
         btn.textContent = "Darken";
         // btn.setAttribute("class" , "dark");
-        btn.classList.toggle("dark");
         overlay.style.backgroundColor = "rgb(0 0 0 / 0.0)";
     }
+    btn.classList.toggle("dark");
 })
