@@ -17,6 +17,8 @@ async function fetchHouseData(){
     const data = await response.json();
 
     console.log(data);
+    houses = data ;
+    initializeForm();
   }
 
   catch (error) {
@@ -33,7 +35,26 @@ const output = document.getElementById("output");
 let houses;
 
  function initializeForm() {
-  
+ let temparray = [];
+ temparray.push(houses[0].street)
+ let count = 0;
+ for(let i = 0 ; i < houses.length ; i++ ){
+      if(houses[i].street === temparray[count]){
+       //count is essential , as houses loop goes on the temparray does not have enough of houses index
+       // wrong logic (houses[i].street === temparray[i])
+      }
+      else if (houses[i].street != temparray[count]){
+        count++;
+        temparray.push(houses[i].street);
+      }
+ }
+ console.log(temparray)
+ for (street of temparray){
+  let option = document.createElement("option");
+  option.setAttribute('value' , 'street');
+  option.textContent = street;
+  streetSelect.appendChild(option);
+ }
 }
 
 function renderHouses(e) {
