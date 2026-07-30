@@ -70,7 +70,7 @@ let Bathrooms = 0;
   if(houses[i].bedrooms > Rooms){
     Rooms = houses[i].bedrooms;
   }
-  else if (houses[i].bathrooms > Bathrooms){
+   if (houses[i].bathrooms > Bathrooms){
     Bathrooms = houses[i].bathrooms;
   }
 }
