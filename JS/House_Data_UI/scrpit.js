@@ -35,26 +35,61 @@ const output = document.getElementById("output");
 let houses;
 
  function initializeForm() {
+  //Streets Selector
  let temparray = [];
  temparray.push(houses[0].street)
  let count = 0;
+
+let Rcount = 0;
  for(let i = 0 ; i < houses.length ; i++ ){
+
       if(houses[i].street === temparray[count]){
        //count is essential , as houses loop goes on the temparray does not have enough of houses index
        // wrong logic (houses[i].street === temparray[i])
       }
-      else if (houses[i].street != temparray[count]){
+
+      else {
         count++;
         temparray.push(houses[i].street);
       }
  }
  console.log(temparray)
+
  for (street of temparray){
   let option = document.createElement("option");
   option.setAttribute('value' , 'street');
   option.textContent = street;
   streetSelect.appendChild(option);
  }
+
+ //Rooms Selector
+let Rooms = 0;
+let Bathrooms = 0;
+ for(let i = 0 ; i < houses.length ; i++){
+
+  if(houses[i].bedrooms > Rooms){
+    Rooms = houses[i].bedrooms;
+  }
+  else if (houses[i].bathrooms > Bathrooms){
+    Bathrooms = houses[i].bathrooms;
+  }
+}
+console.log(Rooms);
+console.log(Bathrooms);
+//Bedroom Appending
+for(let i = 1 ; i <= Rooms ; i++){
+  let Bedroom_options = document.createElement("option");
+  Bedroom_options.text = i;
+  Bedroom_options.value = i;
+  bedroomSelect.appendChild(Bedroom_options);
+}
+//Bathrooms Appending
+for (let i = 1 ; i <= Bathrooms ; i++){
+  let Bathrooms_options = document.createElement("option")
+  Bathrooms_options.text = i;
+  Bathrooms_options.value = i;
+  bathroomSelect.appendChild(Bathrooms_options);
+}
 }
 
 function renderHouses(e) {
