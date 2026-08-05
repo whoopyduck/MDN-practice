@@ -53,11 +53,19 @@ let Rcount = 0;
         temparray.push(houses[i].street);
       }
  }
+//Gemini's logic
+let uniquerooms = [];
+ for(let i = 0 ; i < houses.length ; i++){
+  let streets = houses[i].street;
+  if(!(uniquerooms.includes(streets))){
+    uniquerooms.push(streets);
+  }
+ }
  console.log(temparray)
-
+console.log(uniquerooms)
  for (street of temparray){
   let option = document.createElement("option");
-  option.setAttribute('value' , 'street');
+  option.setAttribute('value' , `${street}`);
   option.textContent = street;
   streetSelect.appendChild(option);
  }
@@ -91,12 +99,21 @@ for (let i = 1 ; i <= Bathrooms ; i++){
   bathroomSelect.appendChild(Bathrooms_options);
 }
 }
-
+let filtered;
 function renderHouses(e) {
   // Stop the form submitting
   e.preventDefault();
-
   // Add rest of code here
+  filtered = houses.filter((item) =>
+  {
+    // console.log(item)
+    if(streetSelect.value === item.street){
+      
+      console.log(Object.values(item.room_sizes)[1])
+      return item;
+    }
+  })
+  console.log(filtered)
 }
 
 // Add a submit listener to the <form> element
