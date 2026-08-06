@@ -106,9 +106,9 @@ function renderHouses(e) {
   // Add rest of code here
   let filtered_streets = houses.filter((item) =>
     {
-    if(streetSelect.value === item.street || streetSelect.value === ""){
-        if(Number(bedroomSelect.value) === item.bedrooms || Number(bedroomSelect.value) === ""){
-            if(Number(bathroomSelect.value) === item.bathrooms || Number(bathroomSelect.value) === ""){
+    if(streetSelect.value === item.street || streetSelect.value === " "){
+        if(Number(bedroomSelect.value) === item.bedrooms || bedroomSelect.value === " "){
+            if(Number(bathroomSelect.value) === item.bathrooms || bathroomSelect.value === " "){
               return item;
             }
         }
