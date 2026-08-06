@@ -104,16 +104,28 @@ function renderHouses(e) {
   // Stop the form submitting
   e.preventDefault();
   // Add rest of code here
-  filtered = houses.filter((item) =>
-  {
-    // console.log(item)
-    if(streetSelect.value === item.street){
-      
-      console.log(Object.values(item.room_sizes)[1])
-      return item;
+  let filtered_streets = houses.filter((item) =>
+    {
+    if(streetSelect.value === item.street || streetSelect.value === ""){
+        if(Number(bedroomSelect.value) === item.bedrooms || Number(bedroomSelect.value) === ""){
+            if(Number(bathroomSelect.value) === item.bathrooms || Number(bathroomSelect.value) === ""){
+              return item;
+            }
+        }
+      // return item;
     }
+    // console.log(item)
   })
-  console.log(filtered)
+
+  console.log(filtered_streets)
+//  let filtered_bedrooms = filtered_streets.filter((item) =>
+//   {
+//     console.log(item.bedrooms)
+//     if(Number(bedroomSelect.value) === item.bedrooms){
+//       return item;
+//     }
+//   })
+//   console.log(filtered_bedrooms);
 }
 
 // Add a submit listener to the <form> element
