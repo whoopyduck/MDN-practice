@@ -99,12 +99,12 @@ for (let i = 1 ; i <= Bathrooms ; i++){
   bathroomSelect.appendChild(Bathrooms_options);
 }
 }
-let filtered;
+
 function renderHouses(e) {
   // Stop the form submitting
   e.preventDefault();
   // Add rest of code here
-  let filtered_streets = houses.filter((item) =>
+  let filtered_array = houses.filter((item) =>
     {
     if(streetSelect.value === item.street || streetSelect.value === " "){
         if(Number(bedroomSelect.value) === item.bedrooms || bedroomSelect.value === " "){
@@ -117,15 +117,22 @@ function renderHouses(e) {
     // console.log(item)
   })
 
-  console.log(filtered_streets)
-//  let filtered_bedrooms = filtered_streets.filter((item) =>
-//   {
-//     console.log(item.bedrooms)
-//     if(Number(bedroomSelect.value) === item.bedrooms){
-//       return item;
-//     }
-//   })
-//   console.log(filtered_bedrooms);
+  // console.log(filtered_array)
+  resultCount.textContent = `${filtered_array.length}`;
+  output.innerHTML = "";
+  function renderHouse(filtered_array){
+    let arrays = filtered_array;
+    for (array of arrays){
+      let ttlarea = 0;
+      let roomarr = array.room_sizes; //when removed let it also works 
+      let rooms = Object.values(roomarr);
+      for (room of rooms){
+        ttlarea += room;
+      }
+      console.log(ttlarea)
+    }
+  }
+  renderHouse(filtered_array)
 }
 
 // Add a submit listener to the <form> element
