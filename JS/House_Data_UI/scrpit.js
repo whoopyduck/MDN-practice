@@ -117,9 +117,10 @@ function renderHouses(e) {
     // console.log(item)
   })
 
-  // console.log(filtered_array)
+  console.log(filtered_array)
   resultCount.textContent = `${filtered_array.length}`;
   output.innerHTML = "";
+
   function renderHouse(filtered_array){
     let arrays = filtered_array;
     for (array of arrays){
@@ -130,6 +131,31 @@ function renderHouses(e) {
         ttlarea += room;
       }
       console.log(ttlarea)
+      
+      let motherarticle = document.createElement("article");
+      let streetname = document.createElement("h2");
+      let unorderedlist = document.createElement("ul");
+      // let listitem1 = document.createElement("li");
+      // let listitem2 = document.createElement("li");
+      // let listitem3 = document.createElement("li");
+      // let listitem4 = document.createElement("li");
+      streetname.textContent = `${array.house_number} ${array.street}`;
+      // listitem1.textContent = `🛏️ Bedrooms: ${array.bedrooms}`;
+      // listitem2.textContent = `🛀 Bathrooms: ${array.bathrooms}`;
+      // listitem3.textContent = `Room area: ${ttlarea} m<sup>2</sup>`;
+      // listitem4.textContent = `Price: &${array.price}`;
+      //Manual approach to append every single listitem 
+      //Dynamic Approach below
+      let listarr = [`🛏️ Bedrooms: ${array.bedrooms}` , `🛀 Bathrooms: ${array.bathrooms}` ,
+        `Room area: ${ttlarea} m\u00B2` , `Price: &${array.price}`];
+        for (let i = 0 ; i < listarr.length ; i++){
+          let listitem = document.createElement("li");
+          listitem.textContent = listarr[i];
+          unorderedlist.appendChild(listitem);
+        }
+      motherarticle.appendChild(streetname);
+      motherarticle.appendChild(unorderedlist);
+      output.appendChild(motherarticle);
     }
   }
   renderHouse(filtered_array)
