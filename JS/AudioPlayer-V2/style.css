@@ -1,0 +1,16 @@
+#mother{
+    display: grid;
+  place-items: center;
+}
+#child{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.para-one{
+  text-align: center;
+}
+/* body{
+  background-color: black;
+  text-decoration: white;
+} */
