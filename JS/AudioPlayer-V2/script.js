@@ -4,7 +4,14 @@ const input = document.querySelector("#inputbtn");
 const resetbutton = document.querySelector("#reset");
 const childdiv = document.getElementById("child");
 
-resetbutton.addEventListener("click" , () => {
+let srcarray = [];
+resetbutton.addEventListener("click" , (e) => {
+  e.preventDefault();
+  srcarray.forEach((item) => {
+    URL.revokeObjectURL(item);
+  })
+  srcarray = [];
+  console.log(srcarray.length === 0 ? "Empty" : "Not Empty");
   childdiv.innerHTML = "";
 })
 
@@ -19,6 +26,7 @@ input.addEventListener("change" , (e) =>{
       console.log(files)
       const srcfile = URL.createObjectURL(files) //creating a blob obj of uploaded file
       console.log(srcfile);
+      srcarray.push(srcfile);
       //Elements creation
       const audio  = document.createElement("audio");
       const video = document.createElement("video");
@@ -26,7 +34,7 @@ input.addEventListener("change" , (e) =>{
       para.textContent = files.name;
       para.classList.add("para-one");
       childdiv.appendChild(para);
-      if(files.name.toLowerCase().endsWith("mp4")){
+      if(files.name.toLowerCase().endsWith(".mp4")){
         video.src = srcfile;
         video.controls = true;
         video.width = 300;
