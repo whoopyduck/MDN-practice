@@ -5,15 +5,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <title>Audio Player</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/localforage/1.10.0/localforage.min.js"></script>
     <script src="./script.js" defer></script>
 </head>
 <body>
     <form action="/">
-        <div id="mother">
-            <label for="inputbtn">Upload Audio</label>
-            <input type="file" name="Audio" id="inputbtn" multiple>
-            <button id="reset">Reset</button>
-            <div id="child"></div>
+        <div class="mother">
+            <div class="one">
+
+                    <label for="inputbtn" id="inputlabel">Upload Audio</label>
+                    
+                    <input type="file" name="Audio" id="inputbtn" multiple>
+
+                    <button id="reset">Reset</button>
+                
+            </div>
+
+            <div class="two"> 
+            <div id="child"></div> 
+            </div>
+            
+            <div class="three">
+                    This is three
+            </div>
         </div>
     </form>
 </body>

@@ -1,4 +1,4 @@
-const mother = document.querySelector("#mother")
+const mother = document.querySelector(".mother")
 const input = document.querySelector("#inputbtn");
 // const audio  = document.createElement("audio");
 const resetbutton = document.querySelector("#reset");
