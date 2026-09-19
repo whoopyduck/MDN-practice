@@ -3,14 +3,57 @@ const input = document.querySelector("#inputbtn");
 const resetbutton = document.querySelector("#reset");
 const childdiv = document.getElementById("child");
 
+const divthree = document.querySelector(".three");
 let srcarray = [];
 
 
 childdiv.addEventListener("click" , (e) =>{
+  e.stopPropagation()
   if(e.target.tagName === "P"){
+   let fileData =  e.target.dataset.src;
+   let name =  e.target.dataset.name;
+   let key =  e.target.dataset.key;
     console.log(e.target.dataset.src);
+    renderPlayer(fileData , name , key);
   }
 })
+
+//Media Function to make aud vid tags in tho DIV Three
+function renderPlayer(fileData , name , key){
+ const playeraud = document.createElement("audio");
+  const playervid = document.createElement("video");
+  const player_para = document.createElement("p");
+  const removebutton = document.createElement("button");
+  removebutton.textContent = "Eject";
+      if (name.toLowerCase().endsWith(".mp4")) {
+    divthree.innerHTML = "";
+    playervid.src = fileData;
+    playervid.controls = true;
+    playervid.width = 300;
+    playervid.height = 200;
+    playervid.setAttribute("id" , `${key}`);
+    player_para.textContent = name;
+    divthree.appendChild(playervid);
+    divthree.appendChild(player_para);
+    // para.appendChild(video);
+    
+  } else {
+    divthree.innerHTML = "";
+    playeraud.src = fileData;
+    playeraud.setAttribute("id" , `${key}`);
+    playeraud.controls = true;
+    player_para.textContent = name;
+    divthree.appendChild(playeraud);
+    divthree.appendChild(player_para);
+  }
+  removebutton.addEventListener("click" , (e) =>{
+    e.preventDefault();
+    // URL.revokeObjectURL(fileData);
+    divthree.innerHTML = "";
+    
+  }) 
+  divthree.appendChild(removebutton);
+}
 
 // Helper function to handle DOM creation and Object URL generation
 function renderMediaItem(fileData, fileName , uniqueKey) {
@@ -18,33 +61,39 @@ function renderMediaItem(fileData, fileName , uniqueKey) {
   const mediakey = uniqueKey;
   srcarray.push(srcfile);
 
-  // const audio = document.createElement("audio");
-  // const video = document.createElement("video");
+  // const playeraud = document.createElement("audio");
+  // const playervid = document.createElement("video");
   const para = document.createElement("p");
   const section = document.createElement("div");
 
   para.textContent = fileName;
-  para.setAttribute("for" , `${mediakey}`)
+  // para.setAttribute("for" , `${mediakey}`)
   para.classList.add("para-one");
   para.dataset.src = srcfile;
+  para.dataset.name = fileName;
+  para.dataset.key = mediakey;
   section.appendChild(para);
   
 
-  if (fileName.toLowerCase().endsWith(".mp4")) {
-    // video.src = srcfile;
-    // video.controls = true;
-    // video.width = 300;
-    // video.height = 200;
-    // video.setAttribute("id" , `${mediakey}`);
-    // para.appendChild(video);
-    section.appendChild(para);
-  } else {
-    // audio.src = srcfile;
-    // audio.setAttribute("id" , `${mediakey}`);
-    // audio.controls = true;
-    // para.appendChild(audio);
-    section.appendChild(para);
-  }
+  // if (fileName.toLowerCase().endsWith(".mp4")) {
+  //   divthree.innerHTML = "";
+  //   playervid.src = srcfile;
+  //   playervid.controls = true;
+  //   playervid.width = 300;
+  //   playervid.height = 200;
+  //   playervid.setAttribute("id" , `${mediakey}`);
+    
+  //   divthree.appendChild(playervid);
+  //   // para.appendChild(video);
+    
+  // } else {
+  //   divthree.innerHTML = "";
+  //   playeraud.src = srcfile;
+  //   playeraud.setAttribute("id" , `${mediakey}`);
+  //   playeraud.controls = true;
+    
+  //   divthree.appendChild(playeraud);
+  // }
   const reset_indv = document.createElement("button");
   reset_indv.textContent = "Remove";
   section.append(reset_indv)
@@ -53,6 +102,7 @@ reset_indv.addEventListener("click" , async (e) =>{
     e.preventDefault();
     URL.revokeObjectURL(srcfile);
     await localforage.removeItem(mediakey);
+    divthree.innerHTML = "";
     section.remove();
   })
 
@@ -82,6 +132,7 @@ resetbutton.addEventListener("click", async (e) => {
   
   await localforage.clear();
   childdiv.innerHTML = "";
+  divthree.innerHTML = "";
   console.log("Database cleared. Empty!");
 });
 
