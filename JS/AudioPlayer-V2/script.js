@@ -3,94 +3,109 @@ const input = document.querySelector("#inputbtn");
 const resetbutton = document.querySelector("#reset");
 const childdiv = document.getElementById("child");
 const divthree = document.querySelector(".three");
+const Player = document.querySelector(".Player");
+const controls = document.querySelector(".controls");
+const Ejectbutton = document.getElementById("Eject")
+const Backbutton = document.getElementById("Backward")
+const Forwardbutton = document.getElementById("Forward")
 
 let srcarray = [];
 
-// 1. EVENT DELEGATION: Click playlist item -> Load into Main Player (.three)
+// 1. EVENT DELEGATION FOR PLAYLIST CLICKS
 childdiv.addEventListener("click", (e) => {
+  e.stopPropagation();
   if (e.target.tagName === "P") {
-    const fileData = e.target.dataset.src;
-    const name = e.target.dataset.name;
-    const key = e.target.dataset.key;
+    let fileData = e.target.dataset.src;
+    let name = e.target.dataset.name;
+    let key = e.target.dataset.key;
     renderPlayer(fileData, name, key);
   }
 });
 
-// 2. MAIN STAGE PLAYER RENDERER
+// Eject Button Event Listener
+Ejectbutton.addEventListener("click" , (e) => {
+  // FIX 2: Pause media before clearing DOM on Eject
+  e.preventDefault();
+    const activeMedia = Player.querySelector("audio, video");
+    if (activeMedia) activeMedia.pause();
+    Player.innerHTML = "";
+})
+
+// 2. MAIN STAGE RENDERER (Your original if/else structure)
 function renderPlayer(fileData, name, key) {
-  // Clear previous player completely
-  divthree.innerHTML = "";
+  const playeraud = document.createElement("audio");
+  const playervid = document.createElement("video");
+  const player_para = document.createElement("p");
+  // removebutton.textContent = "Eject";
 
-  const isVideo = name.toLowerCase().endsWith(".mp4");
-  const mediaElement = document.createElement(isVideo ? "video" : "audio");
-  const playerPara = document.createElement("p");
-  const ejectButton = document.createElement("button");
+  // Check file extension using original logic
+  if (name.toLowerCase().endsWith(".mp4")) {
+    Player.innerHTML = "";
+    playervid.src = fileData;
+    playervid.controls = true;
+    playervid.width = 300;
+    playervid.height = 200;
+    
+    // FIX 1: Attach key to track active player
+    playervid.dataset.activeKey = key;
 
-  mediaElement.src = fileData;
-  mediaElement.controls = true;
-  mediaElement.dataset.activeKey = key; // Attach key so delete logic can inspect active track
-  if (isVideo) {
-    mediaElement.width = 300;
-    mediaElement.height = 200;
+    player_para.textContent = name;
+    Player.appendChild(playervid);
+    Player.appendChild(player_para);
+  } else {
+    Player.innerHTML = "";
+    playeraud.src = fileData;
+    playeraud.controls = true;
+    
+    // FIX 1: Attach key to track active player
+    playeraud.dataset.activeKey = key;
+
+    player_para.textContent = name;
+    Player.appendChild(playeraud);
+    Player.appendChild(player_para);
   }
-
-  playerPara.textContent = name;
-  ejectButton.textContent = "Eject";
-
-  ejectButton.addEventListener("click", (e) => {
-    e.preventDefault();
-    mediaElement.pause();
-    divthree.innerHTML = "";
-  });
-
-  divthree.append(mediaElement, playerPara, ejectButton);
-  mediaElement.play().catch(() => {
-    // Catch auto-play policy restrictions gracefully
-  });
 }
 
-// 3. SIDEBAR ITEM RENDERER
+// 3. SIDEBAR ITEM RENDERER (Your original layout)
 function renderMediaItem(fileData, fileName, uniqueKey) {
   const srcfile = URL.createObjectURL(fileData);
   const mediakey = uniqueKey;
   srcarray.push(srcfile);
 
-  const section = document.createElement("div");
   const para = document.createElement("p");
-  const resetIndv = document.createElement("button");
+  const section = document.createElement("div");
 
   para.textContent = fileName;
   para.classList.add("para-one");
-  
-  // Attach metadata via dataset for event delegation
   para.dataset.src = srcfile;
   para.dataset.name = fileName;
   para.dataset.key = mediakey;
+  section.appendChild(para);
 
-  resetIndv.textContent = "Remove";
+  const reset_indv = document.createElement("button");
+  reset_indv.textContent = "Remove";
+  section.append(reset_indv);
 
-  // Individual Removal Handler
-  resetIndv.addEventListener("click", async (e) => {
+  // INDIVIDUAL REMOVAL
+  reset_indv.addEventListener("click", async (e) => {
     e.preventDefault();
 
-    // Check if the track being deleted is currently playing in .three
-    const activePlayer = divthree.querySelector("audio, video");
-    if (activePlayer && activePlayer.dataset.activeKey === mediakey) {
-      activePlayer.pause();
-      divthree.innerHTML = "";
+    // FIX 3: If active track in .three is deleted, stop & clear .three
+    const activeMedia = Player.querySelector("audio, video");
+    if (activeMedia && activeMedia.dataset.activeKey === mediakey) {
+      activeMedia.pause();
+      Player.innerHTML = "";
     }
 
-    // Revoke memory & remove from DB
     URL.revokeObjectURL(srcfile);
     await localforage.removeItem(mediakey);
     
-    // Remove from active URLs tracking array
+    // Clean URL from tracker array
     srcarray = srcarray.filter((url) => url !== srcfile);
 
     section.remove();
   });
 
-  section.append(para, resetIndv);
   childdiv.appendChild(section);
 }
 
@@ -109,18 +124,20 @@ window.addEventListener("DOMContentLoaded", async () => {
 // 5. GLOBAL RESET BUTTON
 resetbutton.addEventListener("click", async (e) => {
   e.preventDefault();
-  
-  // Pause any active playback before wiping
-  const activePlayer = divthree.querySelector("audio, video");
-  if (activePlayer) activePlayer.pause();
 
-  srcarray.forEach((item) => URL.revokeObjectURL(item));
+  // Pause active media before clearing
+  const activeMedia = Player.querySelector("audio, video");
+  if (activeMedia) activeMedia.pause();
+
+  srcarray.forEach((item) => {
+    URL.revokeObjectURL(item);
+  });
   srcarray = [];
 
   await localforage.clear();
   childdiv.innerHTML = "";
-  divthree.innerHTML = "";
-  console.log("Database cleared completely!");
+  Player.innerHTML = "";
+  console.log("Database cleared. Empty!");
 });
 
 // 6. FILE UPLOAD HANDLER

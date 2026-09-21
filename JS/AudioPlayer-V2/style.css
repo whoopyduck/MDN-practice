@@ -226,3 +226,7 @@ body {
 #reset:active {
   transform: scale(0.97);
 }
+
+.controls{
+  display: block;
+}
