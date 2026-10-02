@@ -31,6 +31,20 @@ Ejectbutton.addEventListener("click" , (e) => {
     Player.innerHTML = "";
 })
 
+Player.addEventListener("play" , (e) => {
+  e.stopPropagation();
+  console.log(e.target)
+} , true)
+
+Backbutton.addEventListener("click" , (e) =>{
+  e.preventDefault();
+})
+
+Forwardbutton.addEventListener("click" , (e) =>{
+  e.preventDefault();
+})
+
+
 // 2. MAIN STAGE RENDERER (Your original if/else structure)
 function renderPlayer(fileData, name, key) {
   const playeraud = document.createElement("audio");
