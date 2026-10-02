@@ -1,16 +1,241 @@
-#mother{
-    display: grid;
-  place-items: center;
+/* =========================
+   BASE RESET & LAYOUT
+   ========================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
-#child{
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background-color: #121214;
+  color: #e1e1e6;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+.mother {
+  display: grid;
+  grid-template-columns: 320px 1fr; /* Fixed sidebar width + flexible main stage */
+  grid-template-rows: auto 1fr;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  height: calc(100vh - 40px); /* Lock height to viewport so sidebar scrolls internally */
+}
+
+/* =========================
+   SECTION 1: CONTROLS (TOP-LEFT)
+   ========================= */
+.one {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #1e1e24;
+  padding: 16px;
+  border-radius: 12px;
+  border: 1px solid #2a2a32;
+}
+
+#inputbtn {
+  display: none;
+}
+
+/* =========================
+   SECTION 2: PLAYLIST SIDEBAR (BOTTOM-LEFT)
+   ========================= */
+.two {
+  grid-column: 1;
+  grid-row: 2;
+  background-color: #1e1e24;
+  border-radius: 12px;
+  border: 1px solid #2a2a32;
+  padding: 16px;
+  overflow: hidden; /* Contains internal scroll */
+  display: flex;
+  flex-direction: column;
+}
+
+#child {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto; /* Internal scrolling when tracks accumulate */
+  height: 100%;
+  padding-right: 6px;
+}
+
+/* Custom Scrollbar for Sidebar */
+#child::-webkit-scrollbar {
+  width: 6px;
+}
+#child::-webkit-scrollbar-thumb {
+  background-color: #32323d;
+  border-radius: 4px;
+}
+
+/* Individual Playlist Track Cards */
+#child > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #272730;
+  padding: 10px 12px;
+  border-radius: 8px;
+  gap: 12px;
+  transition: background-color 0.2s ease;
+}
+
+#child > div:hover {
+  background-color: #32323d;
+}
+
+.para-one {
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: #e1e1e6;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* Truncates long filenames cleanly */
+  cursor: pointer;
+  flex: 1;
+}
+
+.para-one:hover {
+  color: #a970ff;
+}
+
+/* Individual Remove Button inside Sidebar */
+#child button {
+  background-color: rgba(255, 75, 75, 0.1);
+  color: #ff5c5c;
+  border: 1px solid rgba(255, 75, 75, 0.2);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#child button:hover {
+  background-color: #ff4b4b;
+  color: #ffffff;
+}
+
+/* =========================
+   SECTION 3: MAIN PLAYER STAGE (RIGHT SIDE)
+   ========================= */
+.three {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  background-color: #1e1e24;
+  border-radius: 12px;
+  border: 1px solid #2a2a32;
+  padding: 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
-}
-.para-one{
+  justify-content: center;
+  gap: 5vh;
   text-align: center;
 }
-/* body{
-  background-color: black;
-  text-decoration: white;
-} */
+
+.three video {
+  max-width: 100%;
+  max-height: 480px;
+  border-radius: 8px;
+  background-color: #000000;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+}
+
+.three audio {
+  width: 100%;
+  max-width: 500px;
+  border-radius: 8px;
+}
+
+.three p {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #a970ff;
+  max-width: 80%;
+  word-break: break-word;
+}
+
+/* Eject Button on Main Stage */
+.three button {
+  background-color: transparent;
+  color: #a1a1aa;
+  border: 1px solid #3f3f46;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.three button:hover {
+  background-color: #272730;
+  color: #ffffff;
+}
+
+/* =========================
+   UPLOAD & RESET BUTTONS
+   ========================= */
+#inputlabel,
+#reset {
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#inputlabel {
+  background-color: #7825eb;
+  color: white;
+  border: 1px solid #7825eb;
+  box-shadow: 0 4px 12px rgba(120, 37, 235, 0.25);
+}
+
+#inputlabel:hover {
+  background-color: #6820ce;
+  border-color: #6820ce;
+}
+
+#reset {
+  background-color: transparent;
+  color: #a1a1aa;
+  border: 1px solid #3f3f46;
+}
+
+#reset:hover {
+  background-color: rgba(255, 75, 75, 0.15);
+  color: #ff5c5c;
+  border-color: #ff4b4b;
+}
+
+#inputlabel:active,
+#reset:active {
+  transform: scale(0.97);
+}
+
+.controls{
+  display: flex;
+  flex-direction: row;
+  gap: 5vh;
+}
+
+.Player{
+  display: flex;
+  flex-direction: column;
+  gap: 5vh;
+  align-items: center;
+}
