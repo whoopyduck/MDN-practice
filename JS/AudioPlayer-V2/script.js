@@ -10,7 +10,8 @@ const Backbutton = document.getElementById("Backward")
 const Forwardbutton = document.getElementById("Forward")
 
 let srcarray = [];
-
+let mediastack = [];
+let mediastackkey = "zxcv";
 // 1. EVENT DELEGATION FOR PLAYLIST CLICKS
 childdiv.addEventListener("click", (e) => {
   e.stopPropagation();
@@ -33,7 +34,12 @@ Ejectbutton.addEventListener("click" , (e) => {
 
 Player.addEventListener("play" , (e) => {
   e.stopPropagation();
-  console.log(e.target)
+  console.log(e.target.dataset.activeKey)
+} , true)
+
+Player.addEventListener("ended" , (e) => {
+  e.stopPropagation();
+  console.log(`End ${e.target.src}`)
 } , true)
 
 Backbutton.addEventListener("click" , (e) =>{
@@ -126,8 +132,16 @@ function renderMediaItem(fileData, fileName, uniqueKey) {
 // 4. LOAD PERSISTENT DATA ON REFRESH
 window.addEventListener("DOMContentLoaded", async () => {
   try {
+    let savedmedia = await localforage.getItem(mediastackkey)
+    mediastack = savedmedia || []; //imp as if in initial state array is empty it will reassign null to the array making it null instead of making array
+    await localforage.setItem(mediastackkey , mediastack);
     await localforage.iterate((value, key) => {
-      renderMediaItem(value.fileData, value.name, key);
+      if(key === mediastackkey){
+        return;
+      }
+      else{
+        renderMediaItem(value.fileData, value.name, key);
+      }
     });
     console.log("Restored saved tracks from localForage!");
   } catch (err) {
@@ -147,7 +161,9 @@ resetbutton.addEventListener("click", async (e) => {
     URL.revokeObjectURL(item);
   });
   srcarray = [];
-
+  mediastack = await localforage.getItem(mediastackkey);
+  mediastack = [];
+  await localforage.setItem(mediastackkey , mediastack);
   await localforage.clear();
   childdiv.innerHTML = "";
   Player.innerHTML = "";
@@ -173,5 +189,12 @@ input.addEventListener("change", async (e) => {
     });
 
     renderMediaItem(files, files.name, uniqueKey);
+
+    mediastack.push(uniqueKey);
+    for (media of mediastack){
+      console.log(media);
+    }
+
+    await localforage.setItem(mediastackkey , mediastack)
   }
 });
