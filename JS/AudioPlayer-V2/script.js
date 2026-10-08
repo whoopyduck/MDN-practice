@@ -15,6 +15,7 @@ let mediastackkey = "zxcv";
 // 1. EVENT DELEGATION FOR PLAYLIST CLICKS
 childdiv.addEventListener("click", (e) => {
   e.stopPropagation();
+  
   if (e.target.tagName === "P") {
     let fileData = e.target.dataset.src;
     let name = e.target.dataset.name;
@@ -109,6 +110,20 @@ function renderMediaItem(fileData, fileName, uniqueKey) {
   // INDIVIDUAL REMOVAL
   reset_indv.addEventListener("click", async (e) => {
     e.preventDefault();
+    //Array removal 
+    let savedmedia = await localforage.getItem(mediastackkey)
+    let index = 0;
+    for(let i = 0 ; i < mediastack.length ; i++){
+      if (mediakey == mediastack[i]){
+        index = i;
+        // console.log(`${mediastack[i]} and ${mediakey}`)
+        savedmedia.splice(index , 1);
+        mediastack = savedmedia || [] ;
+        console.log(mediastack)
+        await localforage.setItem(mediastackkey , mediastack);
+        break;
+      }
+  }
 
     // FIX 3: If active track in .three is deleted, stop & clear .three
     const activeMedia = Player.querySelector("audio, video");
@@ -116,13 +131,14 @@ function renderMediaItem(fileData, fileName, uniqueKey) {
       activeMedia.pause();
       Player.innerHTML = "";
     }
+    
 
     URL.revokeObjectURL(srcfile);
     await localforage.removeItem(mediakey);
     
     // Clean URL from tracker array
     srcarray = srcarray.filter((url) => url !== srcfile);
-
+  
     section.remove();
   });
 
@@ -135,7 +151,9 @@ window.addEventListener("DOMContentLoaded", async () => {
     let savedmedia = await localforage.getItem(mediastackkey)
     mediastack = savedmedia || []; //imp as if in initial state array is empty it will reassign null to the array making it null instead of making array
     await localforage.setItem(mediastackkey , mediastack);
+    
     await localforage.iterate((value, key) => {
+      console.log(`value ${value} and key ${key}`);
       if(key === mediastackkey){
         return;
       }
@@ -191,9 +209,9 @@ input.addEventListener("change", async (e) => {
     renderMediaItem(files, files.name, uniqueKey);
 
     mediastack.push(uniqueKey);
-    for (media of mediastack){
-      console.log(media);
-    }
+    // for (media of mediastack){
+    //   console.log(media);
+    // }
 
     await localforage.setItem(mediastackkey , mediastack)
   }
