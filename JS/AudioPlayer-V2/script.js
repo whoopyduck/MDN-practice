@@ -12,14 +12,19 @@ const Forwardbutton = document.getElementById("Forward")
 let srcarray = [];
 let mediastack = [];
 let mediastackkey = "zxcv";
+let currentIndex  =  null ;
+
 // 1. EVENT DELEGATION FOR PLAYLIST CLICKS
-childdiv.addEventListener("click", (e) => {
+childdiv.addEventListener("click", async (e) => {
   e.stopPropagation();
   
   if (e.target.tagName === "P") {
     let fileData = e.target.dataset.src;
     let name = e.target.dataset.name;
     let key = e.target.dataset.key;
+    let savedmedia = await localforage.getItem(mediastackkey);
+    currentIndex = indexfinder(savedmedia, key)
+    console.log(currentIndex);
     renderPlayer(fileData, name, key);
   }
 });
@@ -38,9 +43,14 @@ Player.addEventListener("play" , (e) => {
   console.log(e.target.dataset.activeKey)
 } , true)
 
-Player.addEventListener("ended" , (e) => {
+Player.addEventListener("ended" , async (e) => {
   e.stopPropagation();
-  console.log(`End ${e.target.src}`)
+  console.log(`End ${e.target.dataset.activeKey}`)
+  let savedmedia = await fetchmediastack();
+  if(currentIndex < savedmedia.length - 1){
+    currentIndex += 1;
+    getChilddiv();
+  }
 } , true)
 
 Backbutton.addEventListener("click" , (e) =>{
@@ -51,11 +61,38 @@ Forwardbutton.addEventListener("click" , (e) =>{
   e.preventDefault();
 })
 
+//Element Index Finder
+function indexfinder(testarray , element){
+  let index;
+  for(let i = 0 ; i < testarray.length ; i++){
+    if(element == testarray[i]){
+      index = i;
+    }
+  }
+    return index;
+}
+
+//Fresh Array 
+async function fetchmediastack(){
+  let savedmedia = await localforage.getItem(mediastackkey);
+  return savedmedia;
+}
+
+//Child DIVs accumulater 
+function getChilddiv (mediakey){
+  let divs = document.querySelectorAll("#child > div")
+  // console.log(divs[0].children[0].dataset);
+  for(let i = 0 ; i < divs.length ; i++){
+    let mydiv = divs[i];
+    console.log(mydiv.children.dataset);
+  }
+}
+
 
 // 2. MAIN STAGE RENDERER (Your original if/else structure)
 function renderPlayer(fileData, name, key) {
   const playeraud = document.createElement("audio");
-  const playervid = document.createElement("video");
+  const playervid  = document.createElement("video");
   const player_para = document.createElement("p");
   // removebutton.textContent = "Eject";
 
@@ -111,19 +148,12 @@ function renderMediaItem(fileData, fileName, uniqueKey) {
   reset_indv.addEventListener("click", async (e) => {
     e.preventDefault();
     //Array removal 
-    let savedmedia = await localforage.getItem(mediastackkey)
-    let index = 0;
-    for(let i = 0 ; i < mediastack.length ; i++){
-      if (mediakey == mediastack[i]){
-        index = i;
-        // console.log(`${mediastack[i]} and ${mediakey}`)
-        savedmedia.splice(index , 1);
-        mediastack = savedmedia || [] ;
-        console.log(mediastack)
-        await localforage.setItem(mediastackkey , mediastack);
-        break;
-      }
-  }
+    let savedmedia = await fetchmediastack();
+    let index =  indexfinder(savedmedia , mediakey)
+    savedmedia.splice(index , 1);
+    mediastack = savedmedia || [] ;
+    console.log(mediastack)
+    await localforage.setItem(mediastackkey , mediastack);
 
     // FIX 3: If active track in .three is deleted, stop & clear .three
     const activeMedia = Player.querySelector("audio, video");
