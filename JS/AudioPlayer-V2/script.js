@@ -36,6 +36,7 @@ Ejectbutton.addEventListener("click" , (e) => {
     const activeMedia = Player.querySelector("audio, video");
     if (activeMedia) activeMedia.pause();
     Player.innerHTML = "";
+    currentIndex = null;
 })
 
 Player.addEventListener("play" , (e) => {
@@ -49,16 +50,37 @@ Player.addEventListener("ended" , async (e) => {
   let savedmedia = await fetchmediastack();
   if(currentIndex < savedmedia.length - 1){
     currentIndex += 1;
-    getChilddiv();
+    let savedmedia = await fetchmediastack(mediastackkey) 
+    getChilddiv(savedmedia[currentIndex]);
   }
 } , true)
 
-Backbutton.addEventListener("click" , (e) =>{
+Backbutton.addEventListener("click" , async (e) =>{
   e.preventDefault();
+  e.stopPropagation()
+  let savedmedia = await fetchmediastack();
+  if(currentIndex > 0){
+    currentIndex -= 1;
+    console.log(currentIndex)
+    let savedmedia = await fetchmediastack(mediastackkey) 
+    getChilddiv(savedmedia[currentIndex]);
+  }
 })
 
-Forwardbutton.addEventListener("click" , (e) =>{
+Forwardbutton.addEventListener("click" , async (e) =>{
   e.preventDefault();
+  e.stopPropagation();
+  let savedmedia = await fetchmediastack();
+  if(currentIndex === null){
+    
+  }
+  else {
+    if(currentIndex < savedmedia.length - 1){
+      currentIndex += 1;
+      let savedmedia = await fetchmediastack(mediastackkey) 
+      getChilddiv(savedmedia[currentIndex]);
+    }
+  }
 })
 
 //Element Index Finder
@@ -80,12 +102,29 @@ async function fetchmediastack(){
 
 //Child DIVs accumulater 
 function getChilddiv (mediakey){
+  let key = mediakey
+  let name ;
+  let src ;
   let divs = document.querySelectorAll("#child > div")
-  // console.log(divs[0].children[0].dataset);
+  console.log(divs)
+  console.log(divs[0].children[0].dataset);
   for(let i = 0 ; i < divs.length ; i++){
-    let mydiv = divs[i];
-    console.log(mydiv.children.dataset);
+        let divchildproperty = divs[i].children;
+
+        for(let j = 0 ; j < divchildproperty.length -1 ; j++){
+          // console.log(divchildproperty.length)
+          // console.log(divchildproperty[j].dataset.key);
+          if(key == divchildproperty[j].dataset.key){
+            console.log(`Key ${key} and present ${divchildproperty[j].dataset.key}`);
+            console.log('match');
+            name = divchildproperty[j].dataset.name;
+            src = divchildproperty[j].dataset.src;
+            break;
+          }
+        }
+
   }
+  renderPlayer(src , name , key);
 }
 
 
@@ -103,6 +142,7 @@ function renderPlayer(fileData, name, key) {
     playervid.controls = true;
     playervid.width = 300;
     playervid.height = 200;
+    playervid.play();
     
     // FIX 1: Attach key to track active player
     playervid.dataset.activeKey = key;
@@ -114,7 +154,7 @@ function renderPlayer(fileData, name, key) {
     Player.innerHTML = "";
     playeraud.src = fileData;
     playeraud.controls = true;
-    
+    playeraud.play();
     // FIX 1: Attach key to track active player
     playeraud.dataset.activeKey = key;
 
@@ -204,7 +244,7 @@ resetbutton.addEventListener("click", async (e) => {
   // Pause active media before clearing
   const activeMedia = Player.querySelector("audio, video");
   if (activeMedia) activeMedia.pause();
-
+  currentIndex = null;
   srcarray.forEach((item) => {
     URL.revokeObjectURL(item);
   });
