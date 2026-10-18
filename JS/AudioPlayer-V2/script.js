@@ -72,7 +72,7 @@ Forwardbutton.addEventListener("click" , async (e) =>{
   e.stopPropagation();
   let savedmedia = await fetchmediastack();
   if(currentIndex === null){
-    
+
   }
   else {
     if(currentIndex < savedmedia.length - 1){
@@ -190,16 +190,22 @@ function renderMediaItem(fileData, fileName, uniqueKey) {
     //Array removal 
     let savedmedia = await fetchmediastack();
     let index =  indexfinder(savedmedia , mediakey)
-    savedmedia.splice(index , 1);
-    mediastack = savedmedia || [] ;
-    console.log(mediastack)
-    await localforage.setItem(mediastackkey , mediastack);
+    if(index !== -1){
+      if(currentIndex !== null && index < currentIndex){
+       currentIndex -= 1; 
+      }
+      savedmedia.splice(index , 1);
+      mediastack = savedmedia || [] ;
+      console.log(mediastack)
+      await localforage.setItem(mediastackkey , mediastack);
+    }
 
     // FIX 3: If active track in .three is deleted, stop & clear .three
     const activeMedia = Player.querySelector("audio, video");
     if (activeMedia && activeMedia.dataset.activeKey === mediakey) {
       activeMedia.pause();
       Player.innerHTML = "";
+
     }
     
 
@@ -222,15 +228,12 @@ window.addEventListener("DOMContentLoaded", async () => {
     mediastack = savedmedia || []; //imp as if in initial state array is empty it will reassign null to the array making it null instead of making array
     await localforage.setItem(mediastackkey , mediastack);
     
-    await localforage.iterate((value, key) => {
-      console.log(`value ${value} and key ${key}`);
-      if(key === mediastackkey){
-        return;
+    for (const key of mediastack) {
+      const item = await localforage.getItem(key);
+      if (item) {
+        renderMediaItem(item.fileData, item.name, key);
       }
-      else{
-        renderMediaItem(value.fileData, value.name, key);
-      }
-    });
+    }
     console.log("Restored saved tracks from localForage!");
   } catch (err) {
     console.error("Failed to load saved tracks:", err);
