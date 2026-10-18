@@ -10,14 +10,21 @@ const Backbutton = document.getElementById("Backward")
 const Forwardbutton = document.getElementById("Forward")
 
 let srcarray = [];
+let mediastack = [];
+let mediastackkey = "zxcv";
+let currentIndex  =  null ;
 
 // 1. EVENT DELEGATION FOR PLAYLIST CLICKS
-childdiv.addEventListener("click", (e) => {
+childdiv.addEventListener("click", async (e) => {
   e.stopPropagation();
+  
   if (e.target.tagName === "P") {
     let fileData = e.target.dataset.src;
     let name = e.target.dataset.name;
     let key = e.target.dataset.key;
+    let savedmedia = await localforage.getItem(mediastackkey);
+    currentIndex = indexfinder(savedmedia, key)
+    console.log(currentIndex);
     renderPlayer(fileData, name, key);
   }
 });
@@ -29,26 +36,102 @@ Ejectbutton.addEventListener("click" , (e) => {
     const activeMedia = Player.querySelector("audio, video");
     if (activeMedia) activeMedia.pause();
     Player.innerHTML = "";
+    currentIndex = null;
 })
 
 Player.addEventListener("play" , (e) => {
   e.stopPropagation();
-  console.log(e.target)
+  console.log(e.target.dataset.activeKey)
 } , true)
 
-Backbutton.addEventListener("click" , (e) =>{
+Player.addEventListener("ended" , async (e) => {
+  e.stopPropagation();
+  console.log(`End ${e.target.dataset.activeKey}`)
+  let savedmedia = await fetchmediastack();
+  if(currentIndex < savedmedia.length - 1){
+    currentIndex += 1;
+    let savedmedia = await fetchmediastack(mediastackkey) 
+    getChilddiv(savedmedia[currentIndex]);
+  }
+} , true)
+
+Backbutton.addEventListener("click" , async (e) =>{
   e.preventDefault();
+  e.stopPropagation()
+  let savedmedia = await fetchmediastack();
+  if(currentIndex > 0){
+    currentIndex -= 1;
+    console.log(currentIndex)
+    let savedmedia = await fetchmediastack(mediastackkey) 
+    getChilddiv(savedmedia[currentIndex]);
+  }
 })
 
-Forwardbutton.addEventListener("click" , (e) =>{
+Forwardbutton.addEventListener("click" , async (e) =>{
   e.preventDefault();
+  e.stopPropagation();
+  let savedmedia = await fetchmediastack();
+  if(currentIndex === null){
+
+  }
+  else {
+    if(currentIndex < savedmedia.length - 1){
+      currentIndex += 1;
+      let savedmedia = await fetchmediastack(mediastackkey) 
+      getChilddiv(savedmedia[currentIndex]);
+    }
+  }
 })
+
+//Element Index Finder
+function indexfinder(testarray , element){
+  let index;
+  for(let i = 0 ; i < testarray.length ; i++){
+    if(element == testarray[i]){
+      index = i;
+    }
+  }
+    return index;
+}
+
+//Fresh Array 
+async function fetchmediastack(){
+  let savedmedia = await localforage.getItem(mediastackkey);
+  return savedmedia;
+}
+
+//Child DIVs accumulater 
+function getChilddiv (mediakey){
+  let key = mediakey
+  let name ;
+  let src ;
+  let divs = document.querySelectorAll("#child > div")
+  console.log(divs)
+  console.log(divs[0].children[0].dataset);
+  for(let i = 0 ; i < divs.length ; i++){
+        let divchildproperty = divs[i].children;
+
+        for(let j = 0 ; j < divchildproperty.length -1 ; j++){
+          // console.log(divchildproperty.length)
+          // console.log(divchildproperty[j].dataset.key);
+          if(key == divchildproperty[j].dataset.key){
+            console.log(`Key ${key} and present ${divchildproperty[j].dataset.key}`);
+            console.log('match');
+            name = divchildproperty[j].dataset.name;
+            src = divchildproperty[j].dataset.src;
+            break;
+          }
+        }
+
+  }
+  renderPlayer(src , name , key);
+}
 
 
 // 2. MAIN STAGE RENDERER (Your original if/else structure)
 function renderPlayer(fileData, name, key) {
   const playeraud = document.createElement("audio");
-  const playervid = document.createElement("video");
+  const playervid  = document.createElement("video");
   const player_para = document.createElement("p");
   // removebutton.textContent = "Eject";
 
@@ -59,6 +142,7 @@ function renderPlayer(fileData, name, key) {
     playervid.controls = true;
     playervid.width = 300;
     playervid.height = 200;
+    playervid.play();
     
     // FIX 1: Attach key to track active player
     playervid.dataset.activeKey = key;
@@ -70,7 +154,7 @@ function renderPlayer(fileData, name, key) {
     Player.innerHTML = "";
     playeraud.src = fileData;
     playeraud.controls = true;
-    
+    playeraud.play();
     // FIX 1: Attach key to track active player
     playeraud.dataset.activeKey = key;
 
@@ -103,20 +187,34 @@ function renderMediaItem(fileData, fileName, uniqueKey) {
   // INDIVIDUAL REMOVAL
   reset_indv.addEventListener("click", async (e) => {
     e.preventDefault();
+    //Array removal 
+    let savedmedia = await fetchmediastack();
+    let index =  indexfinder(savedmedia , mediakey)
+    if(index !== -1){
+      if(currentIndex !== null && index < currentIndex){
+       currentIndex -= 1; 
+      }
+      savedmedia.splice(index , 1);
+      mediastack = savedmedia || [] ;
+      console.log(mediastack)
+      await localforage.setItem(mediastackkey , mediastack);
+    }
 
     // FIX 3: If active track in .three is deleted, stop & clear .three
     const activeMedia = Player.querySelector("audio, video");
     if (activeMedia && activeMedia.dataset.activeKey === mediakey) {
       activeMedia.pause();
       Player.innerHTML = "";
+
     }
+    
 
     URL.revokeObjectURL(srcfile);
     await localforage.removeItem(mediakey);
     
     // Clean URL from tracker array
     srcarray = srcarray.filter((url) => url !== srcfile);
-
+  
     section.remove();
   });
 
@@ -126,9 +224,16 @@ function renderMediaItem(fileData, fileName, uniqueKey) {
 // 4. LOAD PERSISTENT DATA ON REFRESH
 window.addEventListener("DOMContentLoaded", async () => {
   try {
-    await localforage.iterate((value, key) => {
-      renderMediaItem(value.fileData, value.name, key);
-    });
+    let savedmedia = await localforage.getItem(mediastackkey)
+    mediastack = savedmedia || []; //imp as if in initial state array is empty it will reassign null to the array making it null instead of making array
+    await localforage.setItem(mediastackkey , mediastack);
+    
+    for (const key of mediastack) {
+      const item = await localforage.getItem(key);
+      if (item) {
+        renderMediaItem(item.fileData, item.name, key);
+      }
+    }
     console.log("Restored saved tracks from localForage!");
   } catch (err) {
     console.error("Failed to load saved tracks:", err);
@@ -142,12 +247,14 @@ resetbutton.addEventListener("click", async (e) => {
   // Pause active media before clearing
   const activeMedia = Player.querySelector("audio, video");
   if (activeMedia) activeMedia.pause();
-
+  currentIndex = null;
   srcarray.forEach((item) => {
     URL.revokeObjectURL(item);
   });
   srcarray = [];
-
+  mediastack = await localforage.getItem(mediastackkey);
+  mediastack = [];
+  await localforage.setItem(mediastackkey , mediastack);
   await localforage.clear();
   childdiv.innerHTML = "";
   Player.innerHTML = "";
@@ -173,5 +280,12 @@ input.addEventListener("change", async (e) => {
     });
 
     renderMediaItem(files, files.name, uniqueKey);
+
+    mediastack.push(uniqueKey);
+    // for (media of mediastack){
+    //   console.log(media);
+    // }
+
+    await localforage.setItem(mediastackkey , mediastack)
   }
 });
